@@ -101,12 +101,14 @@ def download_file_recursively(parent_id, dst_dir):
             dst_path = os.path.join(dst_dir, f['name'])
             # to download the file
             download_status = download_by_api(file_info=f, dst_dir=dst_path)
-            if download_status == False and f['mimeType'] in GOOGLE_MIME:
-                download_status = download_by_curl(file_info=f, dst_dir=dst_path)
+            if download_status == False:
+                if ['mimeType'] in GOOGLE_MIME:
+                    download_status = download_by_curl(file_info=f, dst_dir=dst_path)
+                else:
+                    error_msg = 'Unknown error occured while processing '+f['name']
+                    write_log(ERROR_LOG_FILE, error_msg)
             else:
-                error_msg = 'Unknown error occured while processing '+f['name']
-                write_log(ERROR_LOG_FILE, error_msg)
-            #download_by_file_id(file_info=f, dst_dir=dst_path)
+                pass
             print('Downloading {} to {}'.format(f['name'],dst_path))
 
 if __name__ == '__main__':
