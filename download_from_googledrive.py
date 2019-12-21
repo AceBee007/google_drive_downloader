@@ -33,7 +33,7 @@ def now_time():
 
 def write_log(log_path, log):
     with open(log_path, 'a') as f:
-        f.writelines(now_time()+'  i '+log+'\n')
+        f.writelines(now_time()+'   '+log+'\n')
 
 def download_by_curl(file_info, dst_dir):
     mime_type_to_link_dict = {
@@ -84,7 +84,7 @@ def download_by_api(file_info, dst_dir):
     except:
         # 普段はAPIによるファイルのダウンロードのエラーを記録しない
         #write_log(ERROR_LOG_FILE,'failed to download (by api) '+extend_file_name)
-        print(colored('passing file '+extend_file_name, 'red'))
+        print(colored('Passing file '+extend_file_name, 'red'))
         return False
 
 
@@ -101,10 +101,10 @@ def download_file_recursively(parent_id, dst_dir):
             dst_path = os.path.join(dst_dir, f['name'])
             # to download the file
             download_status = download_by_api(file_info=f, dst_dir=dst_path)
-            if download_status == False:
+            if download_status == False and f['mimeType'] in GOOGLE_MIME:
                 download_status = download_by_curl(file_info=f, dst_dir=dst_path)
-            if download_status == False:
-                error_msg = ' unknown error occured while processing '+f['name']
+            else:
+                error_msg = 'Unknown error occured while processing '+f['name']
                 write_log(ERROR_LOG_FILE, error_msg)
             #download_by_file_id(file_info=f, dst_dir=dst_path)
             print('Downloading {} to {}'.format(f['name'],dst_path))
