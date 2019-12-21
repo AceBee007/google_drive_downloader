@@ -102,7 +102,7 @@ def download_file_recursively(parent_id, dst_dir):
             # to download the file
             download_status = download_by_api(file_info=f, dst_dir=dst_path)
             if download_status == False:
-                if ['mimeType'] in GOOGLE_MIME:
+                if f['mimeType'] in GOOGLE_MIME:
                     download_status = download_by_curl(file_info=f, dst_dir=dst_path)
                 else:
                     error_msg = 'Unknown error occured while processing '+f['name']
