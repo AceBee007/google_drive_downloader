@@ -57,7 +57,7 @@ def download_by_curl(file_info, dst_dir):
         write_log(ERROR_LOG_FILE,'failed to download (by curl) '+extend_file_name)
         return False
 
-def download_by_api(file_info, dst_dir, log_file='./success.log', error_log_file='./error.log'):
+def download_by_api(file_info, dst_dir):
     if file_info['mimeType'] in GOOGLE_MIME:
         request = drive_service.files().export_media(fileId=file_info['id'],
             mimeType=GOOGLE_MIME[file_info['mimeType']]['office_mime'])
